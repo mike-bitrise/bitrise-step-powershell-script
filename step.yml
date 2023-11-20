@@ -28,13 +28,25 @@ host_os_tags:
 
 inputs:
   - content: |
+      # Make cmdlets throw an exception on error
+      Set-StrictMode -Version Latest
+      $ErrorActionPreference = "Stop"
+      $PSDefaultParameterValues['*:ErrorAction']='Stop'
+      
+      # Make sure that the script fails if any command fails
+      # Unfortunately, in Powershell you have to manually check the exit code
+      # each time for native EXEs.
+      # See this in the example below.
+      
       # Write your Powershell script here
       $ver = $PSVersionTable.PSVersion.ToString()
       echo "Running on Powershell version $ver"
+      if (-not $?) {
+        throw "Command failed!"
+      }
 
     opts:
       title: "Script content"
-      summary: Summary. No more than 2-3 sentences.
       description: |
         Type your script here.
         

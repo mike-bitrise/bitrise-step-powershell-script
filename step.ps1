@@ -45,9 +45,10 @@ Debug-Print "==> Start"
 
 if (![String]::IsNullOrWhiteSpace($working_dir)) {
     Debug-Print "==> Switching to working directory: $working_dir"
-    Set-Location $working_dir -ErrorAction Stop
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host " [!] Failed to switch to working directory: $working_dir"
+    try {
+        Set-Location $working_dir -ErrorAction Stop
+    } catch {
+        Write-Host " [!] => Failed to switch to working directory: $working_dir"
         exit 1
     }
 }
